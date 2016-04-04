@@ -1,0 +1,29 @@
+CoorPT:=Matrix(1..kolikG1,1..2,0):
+
+for i from 1 to kolikG1 do
+    fui:=iiG1[i]:
+    adM:=Matrix(1..noVert,1..noVert,0):
+    fname:=cat(dir,"cycles\\AdjacencyMatrices\\pat",fui+1,".txt"):if (i mod 20)=0 then print(">>>>>  ",i,"   <<<<<<",fname) end if:
+    ff:=fopen(fname,READ):
+    for ii from 1 to noVert do:for jj from 1 to noVert-1 do cti:=fscanf(ff,"%d,"):adM[ii,jj]:=cti[1]:end do:cti:=fscanf(ff,"%d"):adM[ii,noVert]:=cti[1]:end do:
+    fclose(ff):
+    pomp:=0.0:
+    for ii from 1 to noVert do
+      for jj from 1 to noVert do
+         if maska[ii,jj]>0 then 
+             pomp:=pomp+adM[ii,jj]*maska[ii,jj]:
+         end if:
+      end do:
+    end do:
+    CoorPT[i,1]:=3*pomp+(2*(nopart+distances[i,58]+1)/6.0)+((nopart+distances[i,47]+1)/6.0):
+    ######################################################
+    pomn:=0.0:
+    for ii from 1 to noVert do
+      for jj from 1 to noVert do
+         if maska[ii,jj]<0 then 
+             pomn:=pomn+adM[ii,jj]*maska[ii,jj]:
+         end if:
+      end do:
+    end do:
+    CoorPT[i,2]:=-6*pomn+((nopart+distances[i,3]+1)/6.0)+((nopart+distances[i,4]+1)/6.0)+((nopart+distances[i,6]+1)/6.0):
+end do:

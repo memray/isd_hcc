@@ -20,7 +20,7 @@ if __name__=='__main__':
     totally 1587 attributes, but only 38 are of interest
     '''
     col_names = ["ID","HOSPITAL","PROCEDURE_CODE","DIAGNOSIS_CODE","FINANCIAL_CLASS_DESCRIPTION","DRG_CODE","SEVERITY_OF_ILLNESS","Smoking","AGE_ON_CONTACT_DATE","FEM","BMI","BP_SYSTOLIC","DIAB","COPD_DX","GLUCOSE","POTASSIUM(K)","SODIUM(NA)","TOTAL_PROTEIN","PROTHROMBIN_GENE_ANALYSIS","ACTIVATED_PTT","ASPARTATE_AMINOT.(AST)","TOTAL_BILIRUBIN","ALBUMIN","ALKALINE_PHOSPHATASE","UREA_NITROGEN","CALCIUM(CA)","HGB","HEMATOCRIT(HCT)","RBC","MCH","MCV","MCHC","RDW","CREATININE","PLATELETS","WBC","ABS_NEUTROPHILS","ABS_LYMPHOCYTES","ABS_MONOCYTES","CARBON_DIOXIDE(CO2)"]
-    data_frame = data_frame.ix[: , col_names]
+    # data_frame = data_frame.ix[: , col_names]
 
     '''
     Again, strip all the values
@@ -37,10 +37,10 @@ if __name__=='__main__':
     '''
     partite_data = []
 
-    # for col in data_frame:
-    #     print(col+':'+str(len(data_frame[col].unique())))
-    #     print(data_frame[col].unique())
-    #     pass
+    for col in data_frame:
+        print(col+':'+str(len(data_frame[col].unique())))
+        print(data_frame[col].unique())
+        pass
 
     for d in data_frame.iterrows():
         partite_data.append(convert_into_PartiteGraph(d[1]))

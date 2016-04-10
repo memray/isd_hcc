@@ -71,17 +71,24 @@ if __name__=='__main__':
     '''
     coordinate_list = []
     mask_dict = load_masks()
+
+    count_dict = {}
+    count_dict['G1']=0
+    count_dict['G2']=0
+    count_dict['G3']=0
     for i in range(len(partite_data)):
         data = partite_data[i]
         difference = difference_list[i]
         matrix = convert_to_matrix(data)
-        # coordinate = compute_coordinates_for_G1_G2_G3(matrix, difference, mask_dict)
+        coordinate = compute_coordinates_for_G1_G2_G3(matrix, difference, mask_dict)
+        group = classify_group_for_G1_G2_G3(coordinate)
         # coordinate = compute_coordinates_for_G1(matrix, difference, mask_dict)
         # coordinate = compute_coordinates_for_G2(matrix, difference, mask_dict)
-        coordinate = compute_coordinates_for_G3(matrix, difference, mask_dict)
-        print(coordinate)
+        # coordinate = compute_coordinates_for_G3(matrix, difference, mask_dict)
+        count_dict[group]+=1
+        # print('{0}:{1}'.format(coordinate,group))
         pass
         # compute_coordinates_for_G1()
         # compute_coordinates_for_G2()
         # compute_coordinates_for_G3()
-
+    print(count_dict)

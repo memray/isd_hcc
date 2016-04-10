@@ -36,7 +36,7 @@ def convert_to_matrix(data):
     # print(edges)
     return matrix
 
-nopart = 390
+nopart = 39
 def compute_coordinates_for_G1_G2_G3(matrix, distances, masks):
     '''
     return a tuple (x,y), denote the coordinate
@@ -57,6 +57,18 @@ def compute_coordinates_for_G1_G2_G3(matrix, distances, masks):
     y = -6 * pomp + ((nopart + distances[74] + 1) / 6.0)
 
     return (x,y)
+
+def classify_group_for_G1_G2_G3(CoorPT):
+    # Definition of patients in G1
+
+    if CoorPT[1] < 2:
+        return 'G1'
+    # Definition of patients in G2
+    elif (CoorPT[1] >= 2 and CoorPT[0] < 3):
+        return 'G2'
+    # Definition of patients in G3
+    elif (CoorPT[1] >= 2 and CoorPT[0] >= 3):
+        return 'G3'
 
 def compute_coordinates_for_G1(matrix, distances, masks):
     mask = masks['G1']

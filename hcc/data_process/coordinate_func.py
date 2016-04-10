@@ -36,7 +36,7 @@ def convert_to_matrix(data):
     # print(edges)
     return matrix
 
-nopart = 100
+nopart = 390
 def compute_coordinates_for_G1_G2_G3(matrix, distances, masks):
     '''
     return a tuple (x,y), denote the coordinate

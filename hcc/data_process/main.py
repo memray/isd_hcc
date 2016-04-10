@@ -76,6 +76,9 @@ if __name__=='__main__':
         difference = difference_list[i]
         matrix = convert_to_matrix(data)
         coordinate = compute_coordinates_for_G1_G2_G3(matrix, difference, mask_dict)
+        # coordinate = compute_coordinates_for_G1(matrix, difference, mask_dict)
+        # coordinate = compute_coordinates_for_G2(matrix, difference, mask_dict)
+        # coordinate = compute_coordinates_for_G3(matrix, difference, mask_dict)
         print(coordinate)
         pass
         # compute_coordinates_for_G1()

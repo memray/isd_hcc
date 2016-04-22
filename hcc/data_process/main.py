@@ -69,6 +69,9 @@ if __name__=='__main__':
     '''
     calculate coordinate in terms of given two landmarks
     '''
+    # print(os.getcwd())
+    csv_file = open('../../data/output/coordinates.csv','w')
+
     coordinate_list = []
     mask_dict = load_masks()
 
@@ -86,7 +89,10 @@ if __name__=='__main__':
         # coordinate = compute_coordinates_for_G2(matrix, difference, mask_dict)
         # coordinate = compute_coordinates_for_G3(matrix, difference, mask_dict)
         count_dict[group]+=1
-        # print('{0}:{1}'.format(coordinate,group))
+        print('{0}:{1}'.format(coordinate,group))
+
+        csv_file.write('{0},{1},{2}\n'.format(coordinate[0], coordinate[1], group))
+
         pass
         # compute_coordinates_for_G1()
         # compute_coordinates_for_G2()

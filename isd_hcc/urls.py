@@ -18,5 +18,9 @@ from django.contrib import admin
 from hcc import views as hcc_views
 urlpatterns = [
     url(r'^$', hcc_views.index),
+    url(r'^get_all/', hcc_views.get_all),
+    url(r'^get_group1/', hcc_views.get_group1),
+    url(r'^get_group2/', hcc_views.get_group2),
+    url(r'^get_group3/', hcc_views.get_group3),
     url(r'^admin/', admin.site.urls),
 ]

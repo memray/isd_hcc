@@ -7,16 +7,16 @@ def load_landmarks():
 
     file_path_list = []
 
-    file_dir = '../../data/HL_ForG1G3_Classification/'
+    file_dir = 'data/HL_ForG1G3_Classification/'
     for file_name in os.listdir(file_dir):
         file_path_list.append(file_dir+file_name)
-    file_dir = '../../data/HLForG1_D_A_Odds/'
+    file_dir = 'data/HLForG1_D_A_Odds/'
     for file_name in os.listdir(file_dir):
         file_path_list.append(file_dir + file_name)
-    file_dir = '../../data/HLForG2_D_A_Odds/'
+    file_dir = 'data/HLForG2_D_A_Odds/'
     for file_name in os.listdir(file_dir):
         file_path_list.append(file_dir + file_name)
-    file_dir = '../../data/HLForG3_D_A_Odds/'
+    file_dir = 'data/HLForG3_D_A_Odds/'
     for file_name in os.listdir(file_dir):
         file_path_list.append(file_dir + file_name)
 

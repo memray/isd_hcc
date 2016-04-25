@@ -7,10 +7,10 @@ def load_masks():
     Reading matrices from file, ranging from 0 to 389
     '''
     mask = {}
-    mask['G123'] = np.loadtxt('../../data/Subgroup123Mask.txt')
-    mask['G1'] = np.loadtxt('../../data/G1Mask.txt')
-    mask['G2'] = np.loadtxt('../../data/G2Mask.txt')
-    mask['G3'] = np.loadtxt('../../data/G3Mask.txt')
+    mask['G123'] = np.loadtxt('data/Subgroup123Mask.txt')
+    mask['G1'] = np.loadtxt('data/G1Mask.txt')
+    mask['G2'] = np.loadtxt('data/G2Mask.txt')
+    mask['G3'] = np.loadtxt('data/G3Mask.txt')
     return mask
 
 def convert_to_matrix(data):

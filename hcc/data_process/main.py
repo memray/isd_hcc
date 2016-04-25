@@ -12,7 +12,9 @@ if __name__=='__main__':
     '''
      read data by pandas, 1318 records in total
     '''
-    data_path = '../../data/LungCombinedDataSIS.csv'
+    os.chdir('../../')
+
+    data_path = 'data/LungCombinedDataSIS.csv'
     data_frame = pd.read_csv(data_path)
 
     '''
@@ -23,7 +25,7 @@ if __name__=='__main__':
     '''
     The raw data totally 1587 attributes, but only 38 are of interest
     '''
-    col_names = ["ID","HOSPITAL","PROCEDURE_CODE","DIAGNOSIS_CODE","FINANCIAL_CLASS_DESCRIPTION","DRG_CODE","SEVERITY_OF_ILLNESS","Smoking","AGE_ON_CONTACT_DATE","FEM","BMI","BP_SYSTOLIC","DIAB","COPD_DX","GLUCOSE","POTASSIUM(K)","SODIUM(NA)","TOTAL_PROTEIN",'PROTHROMBIN_TIME',"ACTIVATED_PTT","ASPARTATE_AMINOT.(AST)","TOTAL_BILIRUBIN","ALBUMIN","ALKALINE_PHOSPHATASE","UREA_NITROGEN","CALCIUM(CA)","HGB","HEMATOCRIT(HCT)","RBC","MCH","MCV","MCHC","RDW","CREATININE","PLATELETS","WBC","ABS_NEUTROPHILS","ABS_LYMPHOCYTES","ABS_MONOCYTES","CARBON_DIOXIDE(CO2)"]
+    col_names = ["ID","HOSPITAL","PROCEDURE_CODE","DIAGNOSIS_CODE","FINANCIAL_CLASS_DESCRIPTION","DRG_CODE","SEVERITY_OF_ILLNESS","SMOKING","AGE_ON_CONTACT_DATE","FEM","BMI","BP_SYSTOLIC","DIAB","COPD_DX","GLUCOSE","POTASSIUM(K)","SODIUM(NA)","TOTAL_PROTEIN",'PROTHROMBIN_TIME',"ACTIVATED_PTT","ASPARTATE_AMINOT.(AST)","TOTAL_BILIRUBIN","ALBUMIN","ALKALINE_PHOSPHATASE","UREA_NITROGEN","CALCIUM(CA)","HGB","HEMATOCRIT(HCT)","RBC","MCH","MCV","MCHC","RDW","CREATININE","PLATELETS","WBC","ABS_NEUTROPHILS","ABS_LYMPHOCYTES","ABS_MONOCYTES","CARBON_DIOXIDE(CO2)"]
     data_frame = data_frame.ix[: , col_names]
 
     '''
@@ -69,8 +71,11 @@ if __name__=='__main__':
     '''
     calculate coordinate in terms of given two landmarks
     '''
-    # print(os.getcwd())
-    csv_file = open('../../data/output/coordinates.csv','w')
+    # write coordinates to file as cache, avoid of generating all the time
+    # csv_file = open('data/output/coordinates.csv','w')
+    csv_file_g1 = open('data/output/coordinates_g1.csv','w')
+    csv_file_g2 = open('data/output/coordinates_g2.csv','w')
+    csv_file_g3 = open('data/output/coordinates_g3.csv','w')
 
     coordinate_list = []
     mask_dict = load_masks()
@@ -79,22 +84,34 @@ if __name__=='__main__':
     count_dict['G1']=0
     count_dict['G2']=0
     count_dict['G3']=0
+
+    # compute coordinates for overview
     for i in range(len(partite_data)):
+        if i<=451:
+            real_group = 'G1'
+        else:
+            real_group = 'G2'
         data = partite_data[i]
         difference = difference_list[i]
         matrix = convert_to_matrix(data)
         coordinate = compute_coordinates_for_G1_G2_G3(matrix, difference, mask_dict)
         group = classify_group_for_G1_G2_G3(coordinate)
-        # coordinate = compute_coordinates_for_G1(matrix, difference, mask_dict)
-        # coordinate = compute_coordinates_for_G2(matrix, difference, mask_dict)
-        # coordinate = compute_coordinates_for_G3(matrix, difference, mask_dict)
         count_dict[group]+=1
         print('{0}:{1}'.format(coordinate,group))
 
-        csv_file.write('{0},{1},{2}\n'.format(coordinate[0], coordinate[1], group))
+        # csv_file.write('{0},{1},{2}\n'.format(coordinate[0], coordinate[1], real_group))
+        if group=='G1':
+            coordinate = compute_coordinates_for_G1(matrix, difference, mask_dict)
+            csv_file_g1.write('{0},{1},{2}\n'.format(coordinate[0], coordinate[1], real_group))
+        if group=='G2':
+            coordinate = compute_coordinates_for_G2(matrix, difference, mask_dict)
+            csv_file_g2.write('{0},{1},{2}\n'.format(coordinate[0], coordinate[1], real_group))
+        if group=='G3':
+            coordinate = compute_coordinates_for_G3(matrix, difference, mask_dict)
+            csv_file_g3.write('{0},{1},{2}\n'.format(coordinate[0], coordinate[1], real_group))
 
-        pass
-        # compute_coordinates_for_G1()
-        # compute_coordinates_for_G2()
-        # compute_coordinates_for_G3()
     print(count_dict)
+    csv_file_g1.close()
+    csv_file_g2.close()
+    csv_file_g3.close()
+

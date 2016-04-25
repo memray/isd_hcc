@@ -1,13 +1,922 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
 <html>
 <head>
-	<meta charset="utf-8" /> 
-    <title>Search - w3cschool.cc</title>
+    <style>
+        body {
+            background-color: #FFFFFF;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+        }
+
+        p {
+            font-family: "Times New Roman";
+            font-size: 20px;
+        }
+
+        [type=text] {
+            border-radius: 4px;
+            border: 1px solid #000000;
+            padding: 2px 5px 2px 5px;
+        }
+
+        #header {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 5px;
+        }
+
+        table tr:nth-child(even) {
+            background: #CCC
+        }
+
+        {
+            background-color: #cecece
+        ;
+        }
+
+        table tr td {
+            padding: 4px 5px 4px 5px;
+            margin: 0;
+
+            /*border-bottom: 1px dashed #000000;*/
+        }
+
+        .bar1 {
+            position: absolute;
+            width: 100px;
+            height: 650px;
+            background-color: rgba(0, 0, 255, 0.3);
+            left: 34px;
+            top: 67px;
+        }
+
+        .bar2 {
+            position: absolute;
+            width: 950px;
+            height: 50px;
+            background-color: rgba(255, 0, 0, 0.3);
+            left: 40px;
+            bottom: 37px;
+        }
+
+        #triangle-bottomleft {
+            top: 58px;
+            left: 133px;
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-bottom: 660px solid rgba(0, 255, 0, 0.1);
+            border-right: 851px solid transparent;
+
+        }
+
+        div#scatterplot {
+            font: 16px sans-serif;
+            float: left;
+            position: relative;
+            width: 80%;
+            margin-left: 10%;
+
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #000;
+            shape-rendering: crispEdges;
+        }
+
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #scatterplot1, #scatterplot2, #scatterplot3 {
+            float: left;
+        }
+
+        .center {
+            width: 126%;
+        }
+
+    </style>
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
 </head>
+</html>
 <body>
-    <form action="/" method="get">
-        <input type="text" name="q">
-        <input type="submit" value="Search">
-    </form>
-    {{ message }}
+<div id="header">
+    <h1>
+        <center>Lung Cancer Surgery Project</center>
+    </h1>
+</div>
+
+<form id="PatientForm" action="#" method="post">
+
+    <p>
+    <center><br>Patient ID: <input type="text" name="id" value="1559477"><br></center>
+    </p>
+
+    <div style="float: left; width: 33%;">
+        <ul>
+            <div id="admission">
+                <h3>Admission Baseline</h3>
+                <table cellspacing="0" width="400">
+                    <tr>
+                        <td>Hospital:</td>
+                        <td>
+                            <select name="hospital">
+                                <option value="puh">PUH</option>
+                                <option value="shy">SHY</option>
+                                <option value="mer">MER</option>
+                                <option value="smh">SMH</option>
+                                <option value="eas">EAS</option>
+                                <option value="ham">HAM</option>
+                                <option value="hry">HRY</option>
+                                <option value="hrz">HRZ</option>
+                                <option value="mag">MAG</option>
+                                <option value="mck">MCK</option>
+                                <option value="nwh">NWH</option>
+                                <option value="pas">PAS</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Procedure Code:</td>
+                        <td><select name="procedure_code">
+                            <option value="3220">3220</option>
+                            <option value="3224">3224</option>
+                            <option value="3229">3229</option>
+                            <option value="3230">3230</option>
+                            <option value="3239">3239</option>
+                            <option value="3241">3241</option>
+                            <option value="3249">3249</option>
+                            <option value="3259">3259</option>
+                            <option value="3452">3452</option>
+                        </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Diagnosis Code:</td>
+                        <td><select name="diagnosis_code">
+                            <option value="1622">1622</option>
+                            <option value="1623">1623</option>
+                            <option value="1624">1624</option>
+                            <option value="1625">1625</option>
+                            <option value="1628">1628</option>
+                            <option value="1629">1629</option>
+                        </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Financial Class Description:</td>
+                        <td><select name="FINANCIAL_CLASS_DESCRIPTION">
+                            <option value="ADVANTRA_MC_HMO">Advantra</option>
+                            <option value="B/C_KEYSTONE">Keystone</option>
+                            <option value="CHAMPUS">Champus</option>
+                            <option value="CIGNA">Cigna</option>
+                            <option value="COMM_UNS_TRANSPLANT">Comm Ins</option>
+                            <option value="COMM_MANAGED_CARE">Comm Managed Care</option>
+                            <option value="COMMERCIAL">Commercial</option>
+                            <option value="GATEWAY">Gateway</option>
+                            <option value="GATEWAY_MGD_MCARE">Gateway MCare</option>
+                            <option value="GATEWAY_TX">Gateway Tx</option>
+                            <option value="GENERAL_ASSIST/MA">General Assist</option>
+                            <option value="HLTH_AMER_COMM_MN_CR">Health American Comm</option>
+                            <option value="HLTH_AMERICA_MA_HMO">Health America HMO</option>
+                            <option value="MA___WEST_VIRGINIA">West Virginia</option>
+                            <option value="MED_PLUS">Med Plus</option>
+                            <option value="MEDICAL_ASSIST__PA">Med Plus</option>
+                            <option value="MEDICARE_PART_A">Medicare Part A</option>
+                            <option value="MEDICARE_PART_B__I/P">Medicare Part B</option>
+                            <option value="MEDICARE_TRANSPLANT">Medicare Transplant</option>
+                            <option value="OTH_NON_PA_MA_MGDO">Other Non PA MA</option>
+                            <option value="OTHER_MC_HMO">Other MC HMO</option>
+                            <option value="OTHER_MC_HMO_TX">Other MC HMO TX</option>
+                            <option value="PRIVATE_PAY">Private Pay</option>
+                            <option value="SECURITY_BLUE_HMO">Security Blue</option>
+                            <option value="SECURITY_BLUE_HMO_TX">Security Blue TX</option>
+                            <option value="UNITED_MGD_MCARE">United MGD MCARE</option>
+                            <option value="UNTD_HLTH_CARE_MGD">United Health Care MGD</option>
+                            <option value="UPMC_EMPLOYEES">UPMC Employees</option>
+                            <option value="UPMC_HEALTH_NETWORK">UPMC Health Network</option>
+                            <option value="UPMC_HP_MEDICARE_HMO">UPMC HP Medicare HMO</option>
+                            <option value="UPMC_HP_MEDICARE_TX">UPMC HP Medicare TX</option>
+                            <option value="US_HEALTHCARE">US Healthcare</option>
+                            <option value="US_HLTHCARE_MED_HMO">US Healthcare Med HMO</option>
+                            <option value="WORKER'S_COMP">Worker's Comp</option>
+
+                        </select>
+                    </tr>
+                    </td>
+
+                    <tr>
+                        <td>DRG Code:</td>
+                        <td><input type="text" name="drg_code" value="163">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Severity of Illness:</td>
+                        <td><input type="radio" name="SEVERITY_OF_ILLNESS" value="0" checked>0
+                            <input type="radio" name="SEVERITY_OF_ILLNESS" value="1">1
+                            <input type="radio" name="SEVERITY_OF_ILLNESS" value="2">2
+                            <input type="radio" name="SEVERITY_OF_ILLNESS" value="3">3
+                            <input type="radio" name="SEVERITY_OF_ILLNESS" value="4">4
+                        </td>
+                    </tr>
+                </table>
+                <br>
+                <br>
+
+
+                <div id="demographic">
+                    <h3>Demographic</h3>
+                    <table cellspacing="0" width="400">
+                        <tr>
+                            <td>Female:</td>
+                            <td><input type="radio" name="FEM" value="1" checked>Yes
+                                <input type="radio" name="FEM" value="0">No
+                            </td>
+                        <tr>
+                            <td>Smoker:</td>
+                            <td><input type="radio" name="Smoking" value="1" checked>Yes
+                                <input type="radio" name="Smoking" value="0">No
+                            </td>
+                        <tr>
+                            <td>Age on Contact Date:</td>
+                            <td><input type="text" name="AGE_ON_CONTACT_DATE" value="45"></td>
+                        <tr>
+                            <td>BMI:</td>
+                            <td><input type="text" name="bmi" value="30.1"></td>
+                        <tr>
+                            <td>BP Systolic:</td>
+                            <td><input type="text" name="BP_SYSTOLIC" value="100"></td>
+                        <tr>
+                            <td>COPD DX:</td>
+                            <td><input type="radio" name="COPD_DX" value="0" checked>Yes
+                                <input type="radio" name="COPD_DX" value="1">No
+                            </td>
+                        <tr>
+                            <td>DIAB:</td>
+                            <td><input type="text" name="diab" value="1"></td>
+
+                    </table>
+                </div>
+
+
+        </ul>
+    </div>
+
+
+    <div style="float: left; width: 33%;">
+        <ul>
+            <div id="molecules">
+                <h3>Small Molecules</h3>
+                <table cellspace="0" width="400">
+                    <tr>
+                        <td>Glucose:</td>
+                        <td><input type="text" name="glucose" value="100"></td>
+                    <tr>
+                        <td>Sodium:</td>
+                        <td><input type="text" name="sodium(na)" value="135"></td>
+                    <tr>
+                        <td>Potassium:</td>
+                        <td><input type="text" name="potassium(k)" value="3.3"></td>
+                    <tr>
+                        <td>UREA Nitrogen:</td>
+                        <td><input type="text" name="urea_nitrogen" value="13"></td>
+                    <tr>
+                        <td>Calcium:</td>
+                        <td><input type="text" name="calcium(ca)" value="8.5"></td>
+                    <tr>
+                        <td>Carbon Dioxide:</td>
+                        <td><input type="text" name="CARBON_DIOXIDE(CO2)" value="25"></td>
+                </table>
+            </div>
+            <br>
+            <br>
+
+
+            <div id="macromolecules">
+                <h3>Blood Macromolecules</h3>
+                <table cellspace="0" width="400">
+                    <tr>
+                        <td>Total Protein:</td>
+                        <td><input type="text" name="total_protein" value="25"></td>
+                    <tr>
+                        <td>Protothrombin:</td>
+                        <td><input type="text" name="PROTHROMBIN_TIME" value="7.2"></td>
+                    <tr>
+                        <td>Activated PTT:</td>
+                        <td><input type="text" name="ACTIVATED_PTT" value="30"></td>
+                    <tr>
+                        <td>Aspartate Amino:</td>
+                        <td><input type="text" name="ASPARTATE_AMINOT.(AST)" value="5"></td>
+                    <tr>
+                        <td>Total Bilirubin:</td>
+                        <td><input type="text" name="TOTAL_BILIRUBIN" value="0.8"></td>
+                    <tr>
+                        <td>Albumin:</td>
+                        <td><input type="text" name="ALBUMIN" value="3.5"></td>
+                    <tr>
+                        <td>Alkaline Phosphatase:</td>
+                        <td><input type="text" name="ALKALINE_PHOSPHATASE" value="75"></td>
+                    <tr>
+                        <td>HGB:</td>
+                        <td><input type="text" name="hgb" value="11.2"></td>
+
+                </table>
+            </div>
+            <br>
+            <input class="center" type="button" name="submit" onclick=generate(); ; value="Submit patient's information"
+
+            <br>
+            {% comment %}<input type="button" name="submit" onclick=generate(); value="Generate Patient Chart">{% endcomment %}
+            <div class="center"><input type="button" name="submit1" onclick=generate1();
+                                       value="Generate Patient Chart G1">
+                <input type="button" name="submit2" onclick=generate2(); value="Generate Patient Chart G2">
+                <input type="button" name="submit3" onclick=generate3(); value="Generate Patient Chart G3"></div>
+        </ul>
+    </div>
+
+
+    <div style="float: left; width: 33%;">
+        <ul>
+            <div id="vessicles">
+                <h3>Blood "Vessicles"</h3>
+                <table cellspacing="0" width="350">
+                    <tr>
+                        <td>Hematocrit:</td>
+                        <td><input type="text" name="HEMATOCRIT(HCT)" value="33.6"></td>
+                    <tr>
+                        <td>RBC:</td>
+                        <td><input type="text" name="rbc" value="3.75"></td>
+                    <tr>
+                        <td>MCH:</td>
+                        <td><input type="text" name="mch" value="29.9"></td>
+                    <tr>
+                        <td>MCV:</td>
+                        <td><input type="text" name="mcv" value="89.6"></td>
+                    <tr>
+                        <td>MCHC:</td>
+                        <td><input type="text" name="mchc" value="33.4"></td>
+                    <tr>
+                        <td>RDW:</td>
+                        <td><input type="text" name="rdw" value="14.6"></td>
+                    <tr>
+                        <td>Creatinine:</td>
+                        <td><input type="text" name="creatinine" value="1"></td>
+                    <tr>
+                        <td>Platelets:</td>
+                        <td><input type="text" name="platelets" value="26"></td>
+                    <tr>
+                        <td>WBC:</td>
+                        <td><input type="text" name="wbc" value="6.2"></td>
+                    <tr>
+                        <td>ABS Lymphocytes:</td>
+                        <td><input type="text" name="ABS_LYMPHOCYTES" value="1.5"></td>
+                    <tr>
+                        <td>ABS Neutrophils:</td>
+                        <td><input type="text" name="ABS_NEUTROPHILS" value="1.5"></td>
+                    <tr>
+                        <td>ABS Monocytes:</td>
+                        <td><input type="text" name="ABS_MONOCYTES" value="1.1"></td>
+                </table>
+            </div>
+
+        </ul>
+    </div>
+
+
+</form>
+</div>
+<br>
+<div id="scatterplot">
+    <div id="bar1" class="bar1 hidden"></div>
+    <div id="bar2" class="bar2 hidden"></div>
+    <div id="triangle-bottomleft" class="hidden"></div>
+</div>
+<div id="scatterplot1">
+</div>
+<div id="scatterplot2">
+</div>
+<div id="scatterplot3">
+</div>
+<script type="text/javascript">
+    function generate() {
+        document.getElementById("bar1").classList.remove("hidden");
+        document.getElementById("bar2").classList.remove("hidden");
+        document.getElementById("triangle-bottomleft").classList.remove("hidden");
+        var margin = {top: 70, right: 20, bottom: 40, left: 40},
+                w = 1000 - margin.left - margin.right,
+                h = 800 - margin.top - margin.bottom;
+
+        var color = d3.scale.category10();
+
+        var x = d3.scale.linear()
+                .range([0, w]);
+
+        var y = d3.scale.linear()
+                .range([h, 0]);
+
+        var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+        var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left");
+
+        var svg = d3.select("#scatterplot").append("svg")
+                .attr("width", w + margin.left + margin.right)
+                .attr("height", h + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+//d3.json("data2.json",function(error,data)
+
+        d3.xhr('/get_all/')
+                .header("Content-Type", "application/json")
+                .post(
+                        JSON.stringify($("#PatientForm").serializeArray()),
+                        function (err, rawData) {
+                            var data = JSON.parse(rawData.responseText);
+                            data = $.parseJSON(data)
+
+                            data.forEach(function (d) {
+                                d.time = +d.time;
+                                d.intensity = +d.intensity;
+                            });
+
+                            x.domain(d3.extent(data, function (d) {
+                                return d.time;
+                            })).nice();
+                            y.domain(d3.extent(data, function (d) {
+                                return d.intensity;
+                            })).nice();
+
+                            svg.append("g")
+                                    .attr("class", "x axis")
+                                    .attr("transform", "translate(0," + h + ")")
+                                    .call(xAxis);
+
+                            svg.append("text")
+                                    .attr("class", "label")
+                                    .attr("x", w)
+                                    .attr("y", h + margin.bottom - 5)
+                                    .style("text-anchor", "end")
+                                    .text("x");
+
+                            svg.append("g")
+                                    .attr("class", "y axis")
+                                    .call(yAxis);
+
+                            svg.append("text")
+                                    .attr("class", "label")
+                                    .attr("transform", "rotate(-90)")
+                                    .attr("y", 6)
+                                    .attr("dy", ".71em")
+                                    .style("text-anchor", "end")
+                                    .text("y");
+
+                            svg.selectAll(".dot")
+                                    .data(data)
+                                    .enter().append("circle")
+                                    .attr("class", "dot")
+                                    .attr("r", 3.5)
+                                    .attr("cx", function (d) {
+                                        return x(d.time);
+                                    })
+                                    .attr("cy", function (d) {
+                                        return y(d.intensity);
+                                    })
+                                    .style("fill", function (d) {
+                                        return color(d.group);
+                                    });
+
+                            var legend = svg.selectAll(".legend")
+                                    .data(color.domain())
+                                    .enter().append("g")
+                                    .attr("class", "legend")
+                                    .attr("transform", function (d, i) {
+                                        return "translate(0," + (i * 20) + ")";
+                                    });
+
+                            legend.append("rect")
+                                    .attr("x", w - 18)
+                                    .attr("width", 18)
+                                    .attr("height", 18)
+                                    .style("fill", color);
+
+                            legend.append("text")
+                                    .attr("x", w - 24)
+                                    .attr("y", 9)
+                                    .attr("dy", ".35em")
+                                    .style("text-anchor", "end")
+                                    .text(function (d) {
+                                        return d;
+                                    });
+
+                        }
+                );
+
+
+        var title = d3.select("svg").append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .attr("class", "title");
+
+        title.append("text")
+                .attr("x", (w / 2))
+                .attr("y", -30)
+                .attr("text-anchor", "middle")
+                .style("font-size", "22px")
+                .text("Patient Scatter Plot");
+
+    }
+    function generate1() {
+        var margin = {top: 70, right: 20, bottom: 40, left: 40},
+                w = 400 - margin.left - margin.right,
+                h = 400 - margin.top - margin.bottom;
+
+        var color = d3.scale.category10();
+
+        var x = d3.scale.linear()
+                .range([0, w]);
+
+        var y = d3.scale.linear()
+                .range([h, 0]);
+
+        var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+        var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left");
+
+        var svg = d3.select("#scatterplot1").append("svg")
+                .attr("width", w + margin.left + margin.right)
+                .attr("height", h + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+//d3.json("data2.json",function(error,data)
+
+        d3.xhr('/get_group1/')
+                .header("Content-Type", "application/json")
+                .post(
+                        JSON.stringify($("#PatientForm").serializeArray()),
+                        function (err, rawData) {
+                            var data = JSON.parse(rawData.responseText);
+                            data = $.parseJSON(data)
+
+                            data.forEach(function (d) {
+                                d.time = +d.time;
+                                d.intensity = +d.intensity;
+                            });
+                            {#            var k = [];#}
+                            {#            data.forEach(function (d) {#}
+                            {#                if (d.group == "G1") {#}
+                            {#                    k.push(d);#}
+                            {#                }#}
+                            {#            })#}
+                            x.domain(d3.extent(data, function (d) {
+                                return d.time;
+                            })).nice();
+                            y.domain(d3.extent(data, function (d) {
+                                return d.intensity;
+                            })).nice();
+
+                            svg.append("g")
+                                    .attr("class", "x axis")
+                                    .attr("transform", "translate(0," + h + ")")
+                                    .call(xAxis);
+
+                            svg.append("text")
+                                    .attr("class", "label")
+                                    .attr("x", w)
+                                    .attr("y", h + margin.bottom - 5)
+                                    .style("text-anchor", "end")
+                                    .text("x");
+
+                            svg.append("g")
+                                    .attr("class", "y axis")
+                                    .call(yAxis);
+
+                            svg.append("text")
+                                    .attr("class", "label")
+                                    .attr("transform", "rotate(-90)")
+                                    .attr("y", 6)
+                                    .attr("dy", ".71em")
+                                    .style("text-anchor", "end")
+                                    .text("y");
+
+                            svg.selectAll(".dot")
+                                    .data(data)
+                                    .enter().append("circle")
+                                    .attr("class", "dot")
+                                    .attr("r", 3.5)
+                                    .attr("cx", function (d) {
+                                        return x(d.time);
+                                    })
+                                    .attr("cy", function (d) {
+                                        return y(d.intensity);
+                                    })
+                                    .style("fill", function (d) {
+                                        return color(d.group);
+                                    });
+
+                            var legend = svg.selectAll(".legend")
+                                    .data(color.domain())
+                                    .enter().append("g")
+                                    .attr("class", "legend")
+                                    .attr("transform", function (d, i) {
+                                        return "translate(0," + (i * 20) + ")";
+                                    });
+
+                            legend.append("rect")
+                                    .attr("x", w - 18)
+                                    .attr("width", 18)
+                                    .attr("height", 18)
+                                    .style("fill", color);
+
+                            legend.append("text")
+                                    .attr("x", w - 24)
+                                    .attr("y", 9)
+                                    .attr("dy", ".35em")
+                                    .style("text-anchor", "end")
+                                    .text(function (d) {
+                                        return d;
+                                    });
+                        });
+
+        var title = d3.select("svg").append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .attr("class", "title");
+
+//title.append("text")
+        //.attr("x",(w/2))
+        //.attr("y",-30)
+        //.attr("text-anchor","middle")
+        //.style("font-size","22px")
+        //.text("Patient Scatter Plot");
+    }
+
+
+    function generate2() {
+        var margin = {top: 70, right: 20, bottom: 40, left: 40},
+                w = 400 - margin.left - margin.right,
+                h = 400 - margin.top - margin.bottom;
+
+        var color = d3.scale.category10();
+
+        var x = d3.scale.linear()
+                .range([0, w]);
+
+        var y = d3.scale.linear()
+                .range([h, 0]);
+
+        var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+        var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left");
+
+        var svg = d3.select("#scatterplot2").append("svg")
+                .attr("width", w + margin.left + margin.right)
+                .attr("height", h + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+        d3.xhr('/get_group2/')
+                .header("Content-Type", "application/json")
+                .post(
+                        JSON.stringify($("#PatientForm").serializeArray()),
+                        function (err, rawData) {
+                            var data = JSON.parse(rawData.responseText);
+                            data = $.parseJSON(data)
+
+                            data.forEach(function (d) {
+                                d.time = +d.time;
+                                d.intensity = +d.intensity;
+                            });
+
+                            x.domain(d3.extent(data, function (d) {
+                                return d.time;
+                            })).nice();
+                            y.domain(d3.extent(data, function (d) {
+                                return d.intensity;
+                            })).nice();
+
+                            svg.append("g")
+                                    .attr("class", "x axis")
+                                    .attr("transform", "translate(0," + h + ")")
+                                    .call(xAxis);
+
+                            svg.append("text")
+                                    .attr("class", "label")
+                                    .attr("x", w)
+                                    .attr("y", h + margin.bottom - 5)
+                                    .style("text-anchor", "end")
+                                    .text("x");
+
+                            svg.append("g")
+                                    .attr("class", "y axis")
+                                    .call(yAxis);
+
+                            svg.append("text")
+                                    .attr("class", "label")
+                                    .attr("transform", "rotate(-90)")
+                                    .attr("y", 6)
+                                    .attr("dy", ".71em")
+                                    .style("text-anchor", "end")
+                                    .text("y");
+
+                            svg.selectAll(".dot")
+                                    .data(data)
+                                    .enter().append("circle")
+                                    .attr("class", "dot")
+                                    .attr("r", 3.5)
+                                    .attr("cx", function (d) {
+                                        return x(d.time);
+                                    })
+                                    .attr("cy", function (d) {
+                                        return y(d.intensity);
+                                    })
+                                    .style("fill", function (d) {
+                                        return color(d.group);
+                                    });
+
+                            var legend = svg.selectAll(".legend")
+                                    .data(color.domain())
+                                    .enter().append("g")
+                                    .attr("class", "legend")
+                                    .attr("transform", function (d, i) {
+                                        return "translate(0," + (i * 20) + ")";
+                                    });
+
+                            legend.append("rect")
+                                    .attr("x", w - 18)
+                                    .attr("width", 18)
+                                    .attr("height", 18)
+                                    .style("fill", color);
+
+                            legend.append("text")
+                                    .attr("x", w - 24)
+                                    .attr("y", 9)
+                                    .attr("dy", ".35em")
+                                    .style("text-anchor", "end")
+                                    .text(function (d) {
+                                        return d;
+                                    });
+                        });
+
+        var title = d3.select("svg").append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .attr("class", "title");
+
+//title.append("text")
+//	.attr("x",(w/2))
+//	.attr("y",-30)
+//	.attr("text-anchor","middle")
+//	.style("font-size","22px")
+//	.text("Patient Scatter Plot");
+    }
+
+    function generate3() {
+        var margin = {top: 70, right: 20, bottom: 40, left: 40},
+                w = 400 - margin.left - margin.right,
+                h = 400 - margin.top - margin.bottom;
+
+        var color = d3.scale.category10();
+
+        var x = d3.scale.linear()
+                .range([0, w]);
+
+        var y = d3.scale.linear()
+                .range([h, 0]);
+
+        var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+        var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left");
+
+        var svg = d3.select("#scatterplot3").append("svg")
+                .attr("width", w + margin.left + margin.right)
+                .attr("height", h + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        d3.xhr('/get_group3/')
+                .header("Content-Type", "application/json")
+                .post(
+                        JSON.stringify($("#PatientForm").serializeArray()),
+                        function (err, rawData) {
+                            var data = JSON.parse(rawData.responseText);
+                            data = $.parseJSON(data)
+
+                            data.forEach(function (d) {
+                                d.time = +d.time;
+                                d.intensity = +d.intensity;
+                            });
+
+                            x.domain(d3.extent(data, function (d) {
+                                return d.time;
+                            })).nice();
+                            y.domain(d3.extent(data, function (d) {
+                                return d.intensity;
+                            })).nice();
+
+                            svg.append("g")
+                                    .attr("class", "x axis")
+                                    .attr("transform", "translate(0," + h + ")")
+                                    .call(xAxis);
+
+                            svg.append("text")
+                                    .attr("class", "label")
+                                    .attr("x", w)
+                                    .attr("y", h + margin.bottom - 5)
+                                    .style("text-anchor", "end")
+                                    .text("x");
+
+                            svg.append("g")
+                                    .attr("class", "y axis")
+                                    .call(yAxis);
+
+                            svg.append("text")
+                                    .attr("class", "label")
+                                    .attr("transform", "rotate(-90)")
+                                    .attr("y", 6)
+                                    .attr("dy", ".71em")
+                                    .style("text-anchor", "end")
+                                    .text("y");
+
+                            svg.selectAll(".dot")
+                                    .data(data)
+                                    .enter().append("circle")
+                                    .attr("class", "dot")
+                                    .attr("r", 3.5)
+                                    .attr("cx", function (d) {
+                                        return x(d.time);
+                                    })
+                                    .attr("cy", function (d) {
+                                        return y(d.intensity);
+                                    })
+                                    .style("fill", function (d) {
+                                        return color(d.group);
+                                    });
+
+                            var legend = svg.selectAll(".legend")
+                                    .data(color.domain())
+                                    .enter().append("g")
+                                    .attr("class", "legend")
+                                    .attr("transform", function (d, i) {
+                                        return "translate(0," + (i * 20) + ")";
+                                    });
+
+                            legend.append("rect")
+                                    .attr("x", w - 18)
+                                    .attr("width", 18)
+                                    .attr("height", 18)
+                                    .style("fill", color);
+
+                            legend.append("text")
+                                    .attr("x", w - 24)
+                                    .attr("y", 9)
+                                    .attr("dy", ".35em")
+                                    .style("text-anchor", "end")
+                                    .text(function (d) {
+                                        return d;
+                                    });
+                        });
+
+        var title = d3.select("svg").append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .attr("class", "title");
+
+//title.append("text")
+        //.attr("x",(w/2))
+        //.attr("y",-30)
+        //.attr("text-anchor","middle")
+        //.style("font-size","22px")
+        //.text("Patient Scatter Plot");
+    }
+
+
+</script>
 </body>
 </html>
+

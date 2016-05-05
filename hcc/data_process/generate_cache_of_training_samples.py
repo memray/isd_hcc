@@ -72,7 +72,7 @@ if __name__=='__main__':
     calculate coordinate in terms of given two landmarks
     '''
     # write coordinates to file as cache, avoid of generating all the time
-    # csv_file = open('data/output/coordinates.csv','w')
+    csv_file = open('data/output/coordinates.csv','w')
     csv_file_g1 = open('data/output/coordinates_g1.csv','w')
     csv_file_g2 = open('data/output/coordinates_g2.csv','w')
     csv_file_g3 = open('data/output/coordinates_g3.csv','w')
@@ -87,10 +87,13 @@ if __name__=='__main__':
 
     # compute coordinates for overview
     for i in range(len(partite_data)):
-        if i<=451:
-            real_group = 'G1'
+        # the first 451 patients are dead
+        if i<451:
+            real_group_name = 'Patients who died'
+            real_group_number = 'G1'
         else:
-            real_group = 'G2'
+            real_group_name = 'Patients alive'
+            real_group_number = 'G2'
         data = partite_data[i]
         difference = difference_list[i]
         matrix = convert_to_matrix(data)
@@ -99,16 +102,16 @@ if __name__=='__main__':
         count_dict[group]+=1
         print('{0}:{1}'.format(coordinate,group))
 
-        # csv_file.write('{0},{1},{2}\n'.format(coordinate[0], coordinate[1], real_group))
+        csv_file.write('{0},{1},{2},{3}\n'.format(coordinate[0], coordinate[1], real_group_name, real_group_number))
         if group=='G1':
             coordinate = compute_coordinates_for_G1(matrix, difference, mask_dict)
-            csv_file_g1.write('{0},{1},{2}\n'.format(coordinate[0], coordinate[1], real_group))
+            csv_file_g1.write('{0},{1},{2},{3}\n'.format(coordinate[0], coordinate[1], real_group_name, real_group_number))
         if group=='G2':
             coordinate = compute_coordinates_for_G2(matrix, difference, mask_dict)
-            csv_file_g2.write('{0},{1},{2}\n'.format(coordinate[0], coordinate[1], real_group))
+            csv_file_g2.write('{0},{1},{2},{3}\n'.format(coordinate[0], coordinate[1], real_group_name, real_group_number))
         if group=='G3':
             coordinate = compute_coordinates_for_G3(matrix, difference, mask_dict)
-            csv_file_g3.write('{0},{1},{2}\n'.format(coordinate[0], coordinate[1], real_group))
+            csv_file_g3.write('{0},{1},{2},{3}\n'.format(coordinate[0], coordinate[1], real_group_name, real_group_number))
 
     print(count_dict)
     csv_file_g1.close()

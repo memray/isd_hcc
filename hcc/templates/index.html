@@ -51,7 +51,7 @@
             position: absolute;
             width: 100px;
             height: 650px;
-            background-color: rgba(0, 0, 255, 0.3);
+            background-color: rgba(0, 0, 255, 0.2);
             left: 34px;
             top: 67px;
         }
@@ -60,7 +60,7 @@
             position: absolute;
             width: 950px;
             height: 50px;
-            background-color: rgba(255, 0, 0, 0.3);
+            background-color: rgba(255, 0, 0, 0.2);
             left: 40px;
             bottom: 37px;
         }
@@ -71,7 +71,7 @@
             position: absolute;
             width: 0;
             height: 0;
-            border-bottom: 660px solid rgba(0, 255, 0, 0.1);
+            border-bottom: 660px solid rgba(0, 255, 0, 0.15);
             border-right: 851px solid transparent;
 
         }
@@ -83,12 +83,12 @@
             width: 80%;
             margin-left: 10%;
 
-        .axis path,
-        .axis line {
-            fill: none;
-            stroke: #000;
-            shape-rendering: crispEdges;
-        }
+{#        .axis path,#}
+{#        .axis line {#}
+{#            fill: none;#}
+{#            stroke: #000;#}
+{#            shape-rendering: crispEdges;#}
+{#        }#}
 
         }
 
@@ -341,10 +341,12 @@
 
             <br>
             {% comment %}<input type="button" name="submit" onclick=generate(); value="Generate Patient Chart">{% endcomment %}
-            <div class="center"><input type="button" name="submit1" onclick=generate1();
-                                       value="Generate Patient Chart G1">
-                <input type="button" name="submit2" onclick=generate2(); value="Generate Patient Chart G2">
-                <input type="button" name="submit3" onclick=generate3(); value="Generate Patient Chart G3"></div>
+            <div class="center">
+{#                <input type="button" name="submit1" onclick=generate1(); value="Generate Subcohort for G1">#}
+                <input type="button" name="submit1" onclick=generate1(); value="Generate Subcohort for G1">
+                <input type="button" name="submit2" onclick=generate2(); value="Generate Subcohort for G2">
+                <input type="button" name="submit3" onclick=generate3(); value="Generate Subcohort for G3">
+            </div>
         </ul>
     </div>
 
@@ -413,6 +415,7 @@
 </div>
 <script type="text/javascript">
     function generate() {
+
         document.getElementById("bar1").classList.remove("hidden");
         document.getElementById("bar2").classList.remove("hidden");
         document.getElementById("triangle-bottomleft").classList.remove("hidden");
@@ -420,7 +423,31 @@
                 w = 1000 - margin.left - margin.right,
                 h = 800 - margin.top - margin.bottom;
 
+        var markers = {
+            {#             circle: 'M 0, 0  m -5, 0  a 5,5 0 1,0 10,0  a 5,5 0 1,0 -10,0',#}
+            circle: 'M 4, 4  m -4, 0  a 4,4 0 1,0 8,0  a 4,4 0 1,0 -8,0',
+            mars: "m15,7 a 7,7 0 1,0 2,2 z l 1,1 7-7m-7,0 h 7 v 7",
+            moon: "m15,3 a 8.5,8.5 0 1,0 0,13 a 6.5,6.5 0 0,1 0,-13",
+            star: "m11,1 3,9h9l-7,5.5 2.5,8.5-7.5-5-7.5,5 2.5-8.5-7-6.5h9z"
+        };
+        var groupMarker = {
+            {#            G1:"cross",#}
+            {#            G2:"diamond",#}
+            {#            G3:"circle",#}
+            {#            G4:"triangle-down"#}
+            {#            G1:markers.moon,#}
+            {#            G2:markers.mars,#}
+            G1: markers.circle,
+            G2: markers.circle,
+            G3: markers.star
+        }
+
         var color = d3.scale.category10();
+        var groupColor = {
+            G1: "red",
+            G2: "blue",
+            G3: "yellow"
+        };
 
         var x = d3.scale.linear()
                 .range([0, w]);
@@ -442,6 +469,7 @@
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 //d3.json("data2.json",function(error,data)
+
 
         d3.xhr('/get_all/')
                 .header("Content-Type", "application/json")
@@ -487,20 +515,43 @@
                                     .style("text-anchor", "end")
                                     .text("y");
 
-                            svg.selectAll(".dot")
+                            {#                            svg.selectAll(".dot")#}
+                            {#                                    .data(data)#}
+                            {#                                    .enter().append("circle")#}
+                            {#                                    .attr("class", "dot")#}
+                            {#                                    .attr("r", 3.5)#}
+                            {#                                    .attr("cx", function (d) {#}
+                            {#                                        return x(d.time);#}
+                            {#                                    })#}
+                            {#                                    .attr("cy", function (d) {#}
+                            {#                                        return y(d.intensity);#}
+                            {#                                    })#}
+                            {#                                    .style("fill", function (d) {#}
+                            {#                                        return color(d.group);#}
+                            {#                                    });#}
+
+                            svg.selectAll("path")
                                     .data(data)
-                                    .enter().append("circle")
-                                    .attr("class", "dot")
-                                    .attr("r", 3.5)
-                                    .attr("cx", function (d) {
-                                        return x(d.time);
+                                    .enter().append("path")
+                                    .attr("transform", function (d) {
+                                        return "translate(" + x(d.time) + "," + y(d.intensity) + ")";
                                     })
-                                    .attr("cy", function (d) {
-                                        return y(d.intensity);
+                                    {#                                .attr("d",d3.svg.symbol().type(function(d){#}
+                                    {#                                    return groupMarker[d.group];#}
+                                    {#                                }))#}
+                                    .attr("d", function (d) {
+                                        return groupMarker[d.group];
                                     })
+                                    {#                                .attr("r",function(d){return x(d.radius);})#}
+                                    {#                                .style("fill","white")#}
+                                    {#                                .style("stroke",function(d){return color(d.group);})#}
                                     .style("fill", function (d) {
-                                        return color(d.group);
-                                    });
+                                        return groupColor[d.group];
+                                    })
+                                    {#                                .style("stroke",function(d){return color[d.group];})#}
+                                    .style("stroke", "black")
+                                    .style("stroke-width", "0.8px");
+
 
                             var legend = svg.selectAll(".legend")
                                     .data(color.domain())
@@ -524,7 +575,6 @@
                                     .text(function (d) {
                                         return d;
                                     });
-
                         }
                 );
 

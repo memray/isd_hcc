@@ -32,7 +32,7 @@ def load_cache(file_path):
         record['intensity']=tokens[1].strip()
         record['group_name']=tokens[2].strip()
         record['group']=tokens[3].strip()
-        record['radius']=3.5
+        record['radius']=4
         record_list.append(record)
     return record_list
 
@@ -46,7 +46,7 @@ def create_patient_node(coordinate):
     record['intensity'] = coordinate[1]
     record['group_name'] = 'This patient'
     record['group'] = 'G3'
-    record['radius'] = 100
+    record['radius'] = 10
     return record
 
 

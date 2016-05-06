@@ -337,16 +337,15 @@
                 </table>
             </div>
             <br>
-            <input class="center" type="button" name="submit" onclick=generate(); ; value="Submit patient's information"
+            <input class="center" type="button" name="submit" onclick=do_plot(); ; value="Submit patient's information"
 
             <br>
             {% comment %}<input type="button" name="submit" onclick=generate(); value="Generate Patient Chart">{% endcomment %}
-            <div class="center">
+{#            <div class="center">#}
 {#                <input type="button" name="submit1" onclick=generate1(); value="Generate Subcohort for G1">#}
-                <input type="button" name="submit1" onclick=generate1(); value="Generate Subcohort for G1">
-                <input type="button" name="submit2" onclick=generate2(); value="Generate Subcohort for G2">
-                <input type="button" name="submit3" onclick=generate3(); value="Generate Subcohort for G3">
-            </div>
+{#                <input type="button" name="submit2" onclick=generate2(); value="Generate Subcohort for G2">#}
+{#                <input type="button" name="submit3" onclick=generate3(); value="Generate Subcohort for G3">#}
+{#            </div>#}
         </ul>
     </div>
 
@@ -414,7 +413,14 @@
 <div id="scatterplot3">
 </div>
 <script type="text/javascript">
+    function do_plot(){
+        generate();
+        generate1();
+        generate2();
+        generate3();
+    }
     function generate() {
+        document.getElementById('scatterplot').innerHTML="<div id='bar1' class='bar1 hidden'></div> <div id='bar2' class='bar2 hidden'></div><div id='triangle-bottomleft' class='triangle-bottomleft hidden'></div>";
 
         document.getElementById("bar1").classList.remove("hidden");
         document.getElementById("bar2").classList.remove("hidden");
@@ -437,17 +443,22 @@
             {#            G4:"triangle-down"#}
             {#            G1:markers.moon,#}
             {#            G2:markers.mars,#}
-            G1: markers.circle,
-            G2: markers.circle,
-            G3: markers.star
+            'Patients who died': markers.circle,
+            'Patients alive': markers.circle,
+            'This patient': markers.star
         }
 
-        var color = d3.scale.category10();
-        var groupColor = {
-            G1: "red",
-            G2: "blue",
-            G3: "yellow"
-        };
+{#        var color = d3.scale.category10();#}
+        {#        var colorScale = d3.scale.ordinal()#}
+{#       .range(["#7479BC","#7C2833","#E7AC37","BDE7AE","E17250","ECF809","FC6E61"]);//Ffb400#}
+{#var color = d3.scale.ordinal()#}
+{#    .domain(["<400", "400-549", "550-699", "700-849", "850-999", "1000-1149", "1150-1299", "1300-1449", ">1450"])#}
+{#    .range(["#1a9850", "#66bd63", "#a6d96a","#d9ef8b","#ffffbf","#fee08b","#fdae61","#f46d43","#d73027"]);#}
+
+        var groupColor = d3.scale.ordinal()
+            .domain(['Patients who died', 'Patients alive', 'This patient'])
+            .range(["red", "blue", "yellow"]);
+
 
         var x = d3.scale.linear()
                 .range([0, w]);
@@ -515,21 +526,6 @@
                                     .style("text-anchor", "end")
                                     .text("y");
 
-                            {#                            svg.selectAll(".dot")#}
-                            {#                                    .data(data)#}
-                            {#                                    .enter().append("circle")#}
-                            {#                                    .attr("class", "dot")#}
-                            {#                                    .attr("r", 3.5)#}
-                            {#                                    .attr("cx", function (d) {#}
-                            {#                                        return x(d.time);#}
-                            {#                                    })#}
-                            {#                                    .attr("cy", function (d) {#}
-                            {#                                        return y(d.intensity);#}
-                            {#                                    })#}
-                            {#                                    .style("fill", function (d) {#}
-                            {#                                        return color(d.group);#}
-                            {#                                    });#}
-
                             svg.selectAll("path")
                                     .data(data)
                                     .enter().append("path")
@@ -540,13 +536,13 @@
                                     {#                                    return groupMarker[d.group];#}
                                     {#                                }))#}
                                     .attr("d", function (d) {
-                                        return groupMarker[d.group];
+                                        return groupMarker[d.group_name];
                                     })
                                     {#                                .attr("r",function(d){return x(d.radius);})#}
                                     {#                                .style("fill","white")#}
                                     {#                                .style("stroke",function(d){return color(d.group);})#}
                                     .style("fill", function (d) {
-                                        return groupColor[d.group];
+                                        return groupColor(d.group_name);
                                     })
                                     {#                                .style("stroke",function(d){return color[d.group];})#}
                                     .style("stroke", "black")
@@ -554,7 +550,7 @@
 
 
                             var legend = svg.selectAll(".legend")
-                                    .data(color.domain())
+                                    .data(groupColor.domain())
                                     .enter().append("g")
                                     .attr("class", "legend")
                                     .attr("transform", function (d, i) {
@@ -565,7 +561,7 @@
                                     .attr("x", w - 18)
                                     .attr("width", 18)
                                     .attr("height", 18)
-                                    .style("fill", color);
+                                    .style("fill", groupColor);
 
                             legend.append("text")
                                     .attr("x", w - 24)
@@ -588,10 +584,12 @@
                 .attr("y", -30)
                 .attr("text-anchor", "middle")
                 .style("font-size", "22px")
-                .text("Patient Scatter Plot");
+                .text("Patients' Distribution");
 
     }
     function generate1() {
+        document.getElementById('scatterplot1').innerHTML="";
+
         var margin = {top: 70, right: 20, bottom: 40, left: 40},
                 w = 400 - margin.left - margin.right,
                 h = 400 - margin.top - margin.bottom;
@@ -672,7 +670,9 @@
                                     .data(data)
                                     .enter().append("circle")
                                     .attr("class", "dot")
-                                    .attr("r", 3.5)
+                                    .attr("r",  function (d) {
+                                        return d.radius;
+                                    })
                                     .attr("cx", function (d) {
                                         return x(d.time);
                                     })
@@ -680,8 +680,24 @@
                                         return y(d.intensity);
                                     })
                                     .style("fill", function (d) {
-                                        return color(d.group);
-                                    });
+                                        return color(d.group_name);
+                                    })
+                                    .style("stroke", "black")
+                                    .style("stroke-width", "0.5px");
+
+
+                            var title = svg.append("g")
+                                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                                .attr("class", "title");
+
+
+                            title.append("text")
+                                .attr("x",w/3)
+                                .attr("y",-100)
+                                .attr("text-anchor","middle")
+                                .style("font-size","18px")
+                                .text("Subcohort Plot for Red Area");
+
 
                             var legend = svg.selectAll(".legend")
                                     .data(color.domain())
@@ -705,22 +721,16 @@
                                     .text(function (d) {
                                         return d;
                                     });
+
+
                         });
 
-        var title = d3.select("svg").append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-                .attr("class", "title");
-
-//title.append("text")
-        //.attr("x",(w/2))
-        //.attr("y",-30)
-        //.attr("text-anchor","middle")
-        //.style("font-size","22px")
-        //.text("Patient Scatter Plot");
-    }
+            }
 
 
     function generate2() {
+        document.getElementById('scatterplot2').innerHTML="";
+
         var margin = {top: 70, right: 20, bottom: 40, left: 40},
                 w = 400 - margin.left - margin.right,
                 h = 400 - margin.top - margin.bottom;
@@ -796,16 +806,21 @@
                                     .data(data)
                                     .enter().append("circle")
                                     .attr("class", "dot")
-                                    .attr("r", 3.5)
+                                    .attr("r",  function (d) {
+                                        return d.radius;
+                                    })
                                     .attr("cx", function (d) {
                                         return x(d.time);
                                     })
                                     .attr("cy", function (d) {
                                         return y(d.intensity);
                                     })
+                                    .attr("data-legend", function(d){return d.group_name})
                                     .style("fill", function (d) {
-                                        return color(d.group);
-                                    });
+                                        return color(d.group_name);
+                                    })
+                                    .style("stroke", "black")
+                                    .style("stroke-width", "0.5px");
 
                             var legend = svg.selectAll(".legend")
                                     .data(color.domain())
@@ -829,26 +844,33 @@
                                     .text(function (d) {
                                         return d;
                                     });
+
+                            var title = svg.append("g")
+                                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                                .attr("class", "title");
+
+
+                            title.append("text")
+                                .attr("x",w/3)
+                                .attr("y",-100)
+                                .attr("text-anchor","middle")
+                                .style("font-size","18px")
+                                .text("Subcohort Plot for Blue Area");
                         });
 
-        var title = d3.select("svg").append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-                .attr("class", "title");
 
-//title.append("text")
-//	.attr("x",(w/2))
-//	.attr("y",-30)
-//	.attr("text-anchor","middle")
-//	.style("font-size","22px")
-//	.text("Patient Scatter Plot");
     }
 
     function generate3() {
+        document.getElementById('scatterplot3').innerHTML="";
+
         var margin = {top: 70, right: 20, bottom: 40, left: 40},
                 w = 400 - margin.left - margin.right,
                 h = 400 - margin.top - margin.bottom;
 
         var color = d3.scale.category10();
+{#        var colorScale = d3.scale.ordinal()#}
+{#       .range(["#7479BC","#7C2833","#E7AC37","BDE7AE","E17250","ECF809","FC6E61"]);//Ffb400#}
 
         var x = d3.scale.linear()
                 .range([0, w]);
@@ -918,16 +940,21 @@
                                     .data(data)
                                     .enter().append("circle")
                                     .attr("class", "dot")
-                                    .attr("r", 3.5)
+                                    .attr("r",  function (d) {
+                                        return d.radius;
+                                    })
                                     .attr("cx", function (d) {
                                         return x(d.time);
                                     })
                                     .attr("cy", function (d) {
                                         return y(d.intensity);
                                     })
+                                    .attr("data-legend", function(d){return d.group_name})
                                     .style("fill", function (d) {
-                                        return color(d.group);
-                                    });
+                                        return color(d.group_name);
+                                    })
+                                    .style("stroke", "black")
+                                    .style("stroke-width", "0.5px");
 
                             var legend = svg.selectAll(".legend")
                                     .data(color.domain())
@@ -951,18 +978,21 @@
                                     .text(function (d) {
                                         return d;
                                     });
+
+                            var title = svg.append("g")
+                                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                                .attr("class", "title");
+
+
+                            title.append("text")
+                                .attr("x",w/3)
+                                .attr("y",-100)
+                                .attr("text-anchor","middle")
+                                .style("font-size","18px")
+                            .text("Subcohort Plot for Green Area");
+
                         });
 
-        var title = d3.select("svg").append("g")
-                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-                .attr("class", "title");
-
-//title.append("text")
-        //.attr("x",(w/2))
-        //.attr("y",-30)
-        //.attr("text-anchor","middle")
-        //.style("font-size","22px")
-        //.text("Patient Scatter Plot");
     }
 
 

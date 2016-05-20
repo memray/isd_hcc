@@ -109,17 +109,31 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
 </head>
 </html>
-<body>
+<body style="width: 1200px; margin: 0 auto;">
 <div id="header">
     <h1>
         <center>Lung Cancer Surgery Project</center>
     </h1>
 </div>
 
+<h2>Introduction</h2>
+<div id='div-description' style="margin:0px auto;width: 1200px;font-size: larger; margin-bottom: 30px; text-index: 40px">
+    This system is designed for physicians on lung cancer diagnosis, which supports them in analyzing patient's data and making efficient diagnosis that whether a patient with lung cancer is likely to survive or not.
+    <br><br>
+
+    Concretely, after entering the patient's medical information into the form and clicking on the button below,
+the system will generate a scatter plot which visualizing the patient along with other 1,318 historical patients' data into a 2D space.
+The red dot represents that patient is dead due to the lung cancer, the blue dot indicates the patient is alive, and the yellow star shows the patient we input.
+    <br><br>
+
+    We assume that the red area is the high-risk area, which means the patient is very likely to die. And the blue region indicates the patient located here is more likely to survive.
+</div>
+
+<h2>Patient Data</h2>
 <form id="PatientForm" action="#" method="post">
 
     <p>
-    <center><br>Patient ID: <input type="text" name="id" value="1559477"><br></center>
+    <center><br>Patient ID: <input type="text" name="id" value="1559477"></center>
     </p>
 
     <div style="float: left; width: 33%;">
@@ -337,7 +351,7 @@
                 </table>
             </div>
             <br>
-            <input class="center" type="button" name="submit" onclick=do_plot(); ; value="Submit patient's information"
+            <input class="center" type="button" name="submit" style="font-size: large; width: 126%; height: 50px;" onclick=do_plot(); ; value="Generate patients' scatterplot"
 
             <br>
             {% comment %}<input type="button" name="submit" onclick=generate(); value="Generate Patient Chart">{% endcomment %}
@@ -400,7 +414,9 @@
 
 </form>
 </div>
+
 <br>
+
 <div id="scatterplot">
     <div id="bar1" class="bar1 hidden"></div>
     <div id="bar2" class="bar2 hidden"></div>

@@ -118,15 +118,27 @@
 
 <h2>Introduction</h2>
 <div id='div-description' style="margin:0px auto;width: 1200px;font-size: larger; margin-bottom: 30px; text-index: 40px">
-    This system is designed for physicians on lung cancer diagnosis, which supports them in analyzing patient's data and making efficient diagnosis that whether a patient with lung cancer is likely to survive or not.
-    <br><br>
+{#    This system is designed for physicians on lung cancer diagnosis, which supports them in analyzing patient's data and making efficient diagnosis that whether a patient with lung cancer is likely to survive or not.#}
+{#    <br><br>#}
+{##}
+{#    Concretely, after entering the patient's medical information into the form and clicking on the button below,#}
+{#the system will generate a scatter plot which visualizing the patient along with other 1,318 historical patients' data into a 2D space.#}
+{#The red dot represents that patient is dead due to the lung cancer, the blue dot indicates the patient is alive, and the yellow star shows the patient we input.#}
+{#    <br><br>#}
+{##}
+{#    We assume that the red area is the high-risk area, which means the patient is very likely to die. And the blue region indicates the patient located here is more likely to survive.#}
 
-    Concretely, after entering the patient's medical information into the form and clicking on the button below,
-the system will generate a scatter plot which visualizing the patient along with other 1,318 historical patients' data into a 2D space.
-The red dot represents that patient is dead due to the lung cancer, the blue dot indicates the patient is alive, and the yellow star shows the patient we input.
+    This system is designed for physicians on lung cancer diagnosis.
+    It will help medical workers analyze patient's test result and make more efficient diagnosis in determining whether a patient with lung cancer is likely to survive.   
     <br><br>
-
-    We assume that the red area is the high-risk area, which means the patient is very likely to die. And the blue region indicates the patient located here is more likely to survive.
+    Concretely speaking, first of all, enter the patient's medical information into the form.
+    Then, click on the button “Generate patient’s scatterplot”.
+    Finally, our system will create input patient’s place along with other 1,318 historical patients' data into a 2D scatterplot space.
+    In the generated graph, red dots represent the patients died of cancer. The blue dots indicate the alive patients.
+    And the yellow five-pointed star obviously shows the input patient. 
+    <br><br>
+      To make the diagnosis easier for medical workers, we also distinguish patient’s status level in different background color.
+    According to our assumption, the red area is the high-risk area, and the blue region indicates high survival rate.
 </div>
 
 <h2>Patient Data</h2>
